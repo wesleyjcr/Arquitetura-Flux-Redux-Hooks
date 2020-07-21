@@ -1,203 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import React, { Component } from 'react';
 import { MdShoppingCart } from 'react-icons/md';
+
+import api from '../../services/api';
+import { formatPrice } from '../../utils/formatPrice';
 
 import { ProductList } from './styles';
 
-export default function Home() {
-  return (
-    <ProductList>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-superrep-go-feminino/39/HZM-3551-939/HZM-3551-939_zoom1.jpg?ts=1584659721"
-          alt="Tenis Rosa"
-        />
-        <strong>Tenis Rosa</strong>
-        <span>R$ 499,99</span>
+class Home extends Component {
+  state = {
+    products: [],
+  };
 
-        <button type="button">
-          <div>
-            <MdShoppingCart size={16} color="#FFF" />
-          </div>
+  async componentDidMount() {
+    const response = await api.get('products');
 
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-superrep-go-feminino/39/HZM-3551-939/HZM-3551-939_zoom1.jpg?ts=1584659721"
-          alt="Tenis Rosa"
-        />
-        <strong>Tenis Rosa</strong>
-        <span>R$ 499,99</span>
+    const data = response.data.map(prod => ({
+      ...prod,
+      priceFormat: formatPrice(prod.price),
+    }));
 
-        <button type="button">
-          <div>
-            <MdShoppingCart size={16} color="#FFF" />
-          </div>
+    this.setState({ products: data });
+  }
 
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-superrep-go-feminino/39/HZM-3551-939/HZM-3551-939_zoom1.jpg?ts=1584659721"
-          alt="Tenis Rosa"
-        />
-        <strong>Tenis Rosa</strong>
-        <span>R$ 499,99</span>
+  render() {
+    const { products } = this.state;
 
-        <button type="button">
-          <div>
-            <MdShoppingCart size={16} color="#FFF" />
-          </div>
+    return (
+      <ProductList>
+        {products.map(prod => (
+          <li key={prod.id}>
+            <img src={prod.image} alt={prod.title} />
+            <strong>{prod.title}</strong>
+            <span>{prod.priceFormat}</span>
 
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-superrep-go-feminino/39/HZM-3551-939/HZM-3551-939_zoom1.jpg?ts=1584659721"
-          alt="Tenis Rosa"
-        />
-        <strong>Tenis Rosa</strong>
-        <span>R$ 499,99</span>
+            <button type="button">
+              <div>
+                <MdShoppingCart size={16} color="#FFF" />
+              </div>
 
-        <button type="button">
-          <div>
-            <MdShoppingCart size={16} color="#FFF" />
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-superrep-go-feminino/39/HZM-3551-939/HZM-3551-939_zoom1.jpg?ts=1584659721"
-          alt="Tenis Rosa"
-        />
-        <strong>Tenis Rosa</strong>
-        <span>R$ 499,99</span>
-
-        <button type="button">
-          <div>
-            <MdShoppingCart size={16} color="#FFF" />
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-superrep-go-feminino/39/HZM-3551-939/HZM-3551-939_zoom1.jpg?ts=1584659721"
-          alt="Tenis Rosa"
-        />
-        <strong>Tenis Rosa</strong>
-        <span>R$ 499,99</span>
-
-        <button type="button">
-          <div>
-            <MdShoppingCart size={16} color="#FFF" />
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-superrep-go-feminino/39/HZM-3551-939/HZM-3551-939_zoom1.jpg?ts=1584659721"
-          alt="Tenis Rosa"
-        />
-        <strong>Tenis Rosa</strong>
-        <span>R$ 499,99</span>
-
-        <button type="button">
-          <div>
-            <MdShoppingCart size={16} color="#FFF" />
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-superrep-go-feminino/39/HZM-3551-939/HZM-3551-939_zoom1.jpg?ts=1584659721"
-          alt="Tenis Rosa"
-        />
-        <strong>Tenis Rosa</strong>
-        <span>R$ 499,99</span>
-
-        <button type="button">
-          <div>
-            <MdShoppingCart size={16} color="#FFF" />
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-superrep-go-feminino/39/HZM-3551-939/HZM-3551-939_zoom1.jpg?ts=1584659721"
-          alt="Tenis Rosa"
-        />
-        <strong>Tenis Rosa</strong>
-        <span>R$ 499,99</span>
-
-        <button type="button">
-          <div>
-            <MdShoppingCart size={16} color="#FFF" />
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-superrep-go-feminino/39/HZM-3551-939/HZM-3551-939_zoom1.jpg?ts=1584659721"
-          alt="Tenis Rosa"
-        />
-        <strong>Tenis Rosa</strong>
-        <span>R$ 499,99</span>
-
-        <button type="button">
-          <div>
-            <MdShoppingCart size={16} color="#FFF" />
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-superrep-go-feminino/39/HZM-3551-939/HZM-3551-939_zoom1.jpg?ts=1584659721"
-          alt="Tenis Rosa"
-        />
-        <strong>Tenis Rosa</strong>
-        <span>R$ 499,99</span>
-
-        <button type="button">
-          <div>
-            <MdShoppingCart size={16} color="#FFF" />
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-superrep-go-feminino/39/HZM-3551-939/HZM-3551-939_zoom1.jpg?ts=1584659721"
-          alt="Tenis Rosa"
-        />
-        <strong>Tenis Rosa</strong>
-        <span>R$ 499,99</span>
-
-        <button type="button">
-          <div>
-            <MdShoppingCart size={16} color="#FFF" />
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-    </ProductList>
-  );
+              <span>ADICIONAR AO CARRINHO</span>
+            </button>
+          </li>
+        ))}
+      </ProductList>
+    );
+  }
 }
+
+export default Home;
