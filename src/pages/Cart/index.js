@@ -5,9 +5,21 @@ import {
   MdDelete,
 } from 'react-icons/md';
 
+import { connect } from 'react-redux';
+import { removeFromCart, updateAmount } from '../../store/modules/cart/actions';
+import { formatPrice } from '../../utils/formatPrice';
+
 import { Container, ProductTable, Total } from './styles';
 
-export default function Cart() {
+function Cart({ cart, dispatch, total }) {
+  function increment(prod) {
+    dispatch(updateAmount(prod.id, prod.amount + 1));
+  }
+
+  function decrement(prod) {
+    dispatch(updateAmount(prod.id, prod.amount - 1));
+  }
+
   return (
     <Container>
       <ProductTable>
@@ -21,37 +33,39 @@ export default function Cart() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>
-              <img
-                src="https://static.netshoes.com.br/produtos/tenis-nike-superrep-go-feminino/39/HZM-3551-939/HZM-3551-939_zoom1.jpg?ts=1584659721"
-                alt="Tenis Rosa"
-              />
-            </td>
-            <td>
-              <strong>Tênis Nike SuperRep Go Feminino - Pink e Branco</strong>
-              <span>R$ 499,99</span>
-            </td>
-            <td>
-              <div>
-                <button type="button">
-                  <MdRemoveCircleOutline size={20} color="#7159c1" />
+          {cart.map(prod => (
+            <tr key={prod.id}>
+              <td>
+                <img src={prod.image} alt={prod.title} />
+              </td>
+              <td>
+                <strong>{prod.title}</strong>
+                <span>{prod.priceFormat}</span>
+              </td>
+              <td>
+                <div>
+                  <button type="button" onClick={() => decrement(prod)}>
+                    <MdRemoveCircleOutline size={20} color="#7159c1" />
+                  </button>
+                  <input type="number" readOnly value={prod.amount} />
+                  <button type="button" onClick={() => increment(prod)}>
+                    <MdAddCircleOutline size={20} color="#7159c1" />
+                  </button>
+                </div>
+              </td>
+              <td>
+                <strong>{prod.subTotal}</strong>
+              </td>
+              <td>
+                <button
+                  type="button"
+                  onClick={() => dispatch(removeFromCart(prod.id))}
+                >
+                  <MdDelete size={20} color="#7159c1" />
                 </button>
-                <input type="number" readOnly value={1} />
-                <button type="button">
-                  <MdAddCircleOutline size={20} color="#7159c1" />
-                </button>
-              </div>
-            </td>
-            <td>
-              <strong>R$ 499,99</strong>
-            </td>
-            <td>
-              <button type="button">
-                <MdDelete size={20} color="#7159c1" />
-              </button>
-            </td>
-          </tr>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </ProductTable>
 
@@ -60,9 +74,23 @@ export default function Cart() {
 
         <Total>
           <span>TOTAL</span>
-          <strong>R$ 499,99</strong>
+          <strong>{total}</strong>
         </Total>
       </footer>
     </Container>
   );
 }
+
+const mapStateToProps = state => ({
+  cart: state.cart.map(prod => ({
+    ...prod,
+    subTotal: formatPrice(prod.price * prod.amount),
+  })),
+  total: formatPrice(
+    state.cart.reduce((total, prod) => {
+      return total + prod.price * prod.amount;
+    }, 0)
+  ),
+});
+
+export default connect(mapStateToProps)(Cart);
