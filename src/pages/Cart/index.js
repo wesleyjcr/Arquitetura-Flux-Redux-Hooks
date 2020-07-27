@@ -6,18 +6,21 @@ import {
 } from 'react-icons/md';
 
 import { connect } from 'react-redux';
-import { removeFromCart, updateAmount } from '../../store/modules/cart/actions';
+import {
+  removeFromCart,
+  updateAmountRequest,
+} from '../../store/modules/cart/actions';
 import { formatPrice } from '../../utils/formatPrice';
 
 import { Container, ProductTable, Total } from './styles';
 
 function Cart({ cart, dispatch, total }) {
   function increment(prod) {
-    dispatch(updateAmount(prod.id, prod.amount + 1));
+    dispatch(updateAmountRequest(prod.id, prod.amount + 1));
   }
 
   function decrement(prod) {
-    dispatch(updateAmount(prod.id, prod.amount - 1));
+    dispatch(updateAmountRequest(prod.id, prod.amount - 1));
   }
 
   return (
